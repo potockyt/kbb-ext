@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "Keyboard Browsing",
+  "description": "Adds numbered navigation markers to a page",
+  "version": "1.0.0",
+  "homepage_url": "https://github.com/potockyt/kbb-ext",
+  "author": "Tomas Potocky",
+  "applications": {
+  	"gecko": {
+    	"id": "kkb-ext@fairlyterrible.name",
+    	"strict_min_version": "57.0"
+  	}
+  },
+  
+  "icons": {
+    "48": "icons/kbb_icon_48.png",
+    "96": "icons/kbb_icon_96.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["marker.js"]
+    }
+  ],
+
+  "web_accessible_resources": [
+    "resources/marker_bg.png",
+    "resources/marker_bg_x.png"
+  ]
+
+}
