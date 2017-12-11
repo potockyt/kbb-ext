@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Keyboard Browsing",
-  "description": "Adds numbered navigation markers to a page",
-  "version": "1.0.0",
+  "description": "Adds numbered navigation markers to a page.\n \nUse grave accent key to enter or leave keyboard browsing mode.",
+  "version": "1.0.1",
   "homepage_url": "https://github.com/potockyt/kbb-ext",
   "author": "Tomas Potocky",
   "applications": {

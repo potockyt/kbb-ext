@@ -191,6 +191,9 @@ document.addEventListener("keypress", function(event) {
 var delayedInputFocus = function(inputElement, id) {
 	 if (typeof inputElement.focus === 'function' && _selectedId == id) {
 		 inputElement.focus();
+		 unmarkLinks();
+		 resetGlobalState();
+		 _isMod = false;
 	 }
 }
 
