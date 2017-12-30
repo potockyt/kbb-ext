@@ -109,11 +109,15 @@ var markLinks = function() {
 			var mark = document.createElement('div');
 			el.setAttribute("kbbId", _markCount);
 			mark.setAttribute("kbbmId", _markCount);
-			mark.className = 'kbbMark';
-			mark.style.cssText = [ 'top: ', pos.y - _markerBg.height/2 , 'px;', 'left: ',
-					pos.x - _markerBg.width/2, 'px;', 'width: ', _markerBg.width, 'px;',
-					'height: ', _markerBg.height, 'px;', 'line-height: ',
-					_markerBg.height, 'px;' ].join("");
+		        mark.className = 'kbbMark';
+		        var top = pos.y - _markerBg.height/2;
+		        var left = pos.x - _markerBg.width/2;
+		        if (top < 0) top = 0;
+		        if (left < 0) left = 0;
+		        mark.style.cssText = [ 'top: ', top, 'px;', 'left: ', left,
+					       'px;', 'width: ', _markerBg.width, 'px;',
+					       'height: ', _markerBg.height, 'px;', 'line-height: ',
+					       _markerBg.height, 'px;' ].join("");
 
 			mark.innerHTML = Number(_markCount);
 			document.body.appendChild(mark);
