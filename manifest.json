@@ -1,17 +1,18 @@
 {
   "manifest_version": 2,
   "name": "Keyboard Browsing",
-  "description": "Adds numbered navigation markers to a page.\n \nUse grave accent key to enter or leave keyboard browsing mode.",
-  "version": "1.0.1",
+  "description": "Adds numbered navigation markers to a page.",
+  "version": "1.1.0",
   "homepage_url": "https://github.com/potockyt/kbb-ext",
   "author": "Tomas Potocky",
+
   "applications": {
-  	"gecko": {
-    	"id": "kkb-ext@fairlyterrible.name",
-    	"strict_min_version": "57.0"
-  	}
+    "gecko": {
+      "id": "kkb-ext@fairlyterrible.name",
+      "strict_min_version": "57.0"
+    }
   },
-  
+
   "icons": {
     "48": "icons/kbb_icon_48.png",
     "96": "icons/kbb_icon_96.png"
@@ -23,6 +24,13 @@
       "js": ["marker.js"]
     }
   ],
+
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
+  },
+
+  "permissions": ["storage"],
 
   "web_accessible_resources": [
     "resources/marker_bg.png",

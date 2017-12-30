@@ -1,7 +1,14 @@
-//TODO set up from configuration
-const MOD_KEY = '`';
-//TODO set up from configuration
-const SELECTION_DELAY = 1000;
+// User configuration
+var MOD_KEY = "`";
+var SELECTION_DELAY = 1000;
+
+browser.storage.local.get().then(
+  function(result) {
+    MOD_KEY =  result.mod_key || "`";
+    SELECTION_DELAY =  result.selection_delay || 1000;
+  },
+  function(error) { console.log(`kbb error: ${error}`) }
+);
 
 var _markerBg = {
 		url: browser.extension.getURL("resources/marker_bg.png"),

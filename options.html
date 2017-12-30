@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <link href="chrome://browser/content/extension.css" rel="stylesheet" type="text/css"/>
+    <style>
+      ul {
+      list-style-type: none;
+      margin: 0 0 0 .5em;
+      padding: 0;
+      }
+      li { margin-bottom: 1em; }
+      h1 { margin-left: -10px; }
+    </style>
+  </head>
+  <body>
+    <h1 class="panel-section-header">Options</h1>
+    <ul class="panel-section-list">
+      <li>
+	<label>Mod key</label><br/>
+	<input type="text" id="mod_key"/>
+      </li>
+      <li>
+	<label>Selection delay (ms)</label><br/>
+	<input type="text" id="selection_delay"/>
+      </li>
+    </ul>
+    <script src="options.js"></script>
+  </body>
+</html>
