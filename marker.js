@@ -1,11 +1,11 @@
 // User configuration
-var MOD_KEY = "`";
-var SELECTION_DELAY = 1000;
+var MOD_KEY = DEFAULT_MOD_KEY;
+var SELECTION_DELAY = DEFAULT_SELECTION_DELAY;
 
 browser.storage.local.get().then(
   function(result) {
-    MOD_KEY =  result.mod_key || "`";
-    SELECTION_DELAY =  result.selection_delay || 1000;
+    MOD_KEY =  result.mod_key || DEFAULT_MOD_KEY;
+    SELECTION_DELAY =  result.selection_delay || DEFAULT_SELECTION_DELAY;
   },
   function(error) { console.log(`kbb error: ${error}`) }
 );
@@ -33,7 +33,7 @@ var addStyles = function() {
 
 /**
  * get style property of element
- * 
+ *
  * @param element
  * @param property
  */
@@ -43,7 +43,7 @@ var getStyleProp = function(element, property) {
 
 /**
  * get element position
- * 
+ *
  * @param el
  */
 var getPosition = function(el) {
@@ -74,7 +74,7 @@ var markLinks = function() {
 	if (getStyleProp(node, "display") == 'none'
 	    || getStyleProp(node, "visibility") == 'hidden') {
 	  return NodeFilter.FILTER_REJECT;
-	}	
+	}
 	if (node.localName == 'a' || node.localName == 'form') {
 	  return NodeFilter.FILTER_ACCEPT;
 	}
@@ -89,7 +89,7 @@ var markLinks = function() {
     if (el.localName == 'form') {
       var list = el.querySelectorAll('input');
       for (var entry of list.entries()) {
-	var firstInput = entry.find(function(node) { 
+	var firstInput = entry.find(function(node) {
 	  return node instanceof Node && node.getAttribute("type") != 'hidden' && node.getAttribute("type") != 'submit'
 	});
 	if (firstInput !== undefined) {
@@ -97,15 +97,15 @@ var markLinks = function() {
 	  break;
 	}
       }
-    } 
-    
+    }
+
     var pos = getPosition(el);
     // mark only visible links
-    if (pos.y != 0 
-	&& pos.y > document.documentElement.scrollTop 
+    if (pos.y != 0
+	&& pos.y > document.documentElement.scrollTop
 	&& pos.y < document.documentElement.scrollTop + document.documentElement.clientHeight) {
       _markCount++;
-      
+
       var mark = document.createElement('div');
       el.setAttribute("kbbId", _markCount);
       mark.setAttribute("kbbmId", _markCount);
@@ -165,24 +165,7 @@ var resetGlobalState = function() {
   _prevSelectedMark = null;
 };
 
-/**
- * mod keypress
- * 
- * @param event
- * @returns
- */
-document.addEventListener("keypress", function(event) {
-  if (event.key != MOD_KEY) {
-    return;
-  }
-  
-  const contentEditable = event.target.getAttribute('contenteditable');
-  const formElements = ['input', 'textarea', 'select'];
-  const isFormElement = formElements.indexOf(event.target.tagName.toLowerCase()) != -1;
-  if (contentEditable || isFormElement) {
-    return;
-  }
-
+var switchMod = function() {
   if (_isMod) {
     unmarkLinks();
     resetGlobalState();
@@ -191,12 +174,12 @@ document.addEventListener("keypress", function(event) {
     markLinks();
     _isMod = true;
   }
-}, false);
+}
 
 
 /**
  * delayed focus of input element
- * 
+ *
  * @param inputElement
  * @param id - a selected node ID when timer was scheduled
  */
@@ -209,24 +192,14 @@ var delayedInputFocus = function(inputElement, id) {
   }
 }
 
-/**
- * link number keypress
- * 
- * @param event
- * @returns
- */
-document.addEventListener("keypress", function(event) {
-  if (!_isMod || event.key == MOD_KEY) {
-    return;
-  }
-  
+var focusElement = function(event) {
   if (event.timeStamp - _prevEventTimeStamp > SELECTION_DELAY || _markCount < 10) {
     _prevEventTimeStamp = event.timeStamp;
     _selectedId = event.key;
   } else {
     _selectedId += event.key;
   }
-  
+
   var element = document.querySelector('[kbbId="' + _selectedId + '"]');
   if (element == null) {
     return;
@@ -236,7 +209,7 @@ document.addEventListener("keypress", function(event) {
   if (element.localName == 'input') {
     setTimeout(delayedInputFocus, SELECTION_DELAY, element, _selectedId);
   } else {
-    element.focus();		
+    element.focus();
   }
 
 
@@ -245,8 +218,33 @@ document.addEventListener("keypress", function(event) {
   }
   _prevSelectedMark = document.querySelector('div[kbbmId="' + _selectedId + '"]');
   _prevSelectedMark.className = 'kbbMark kbbMarkX';
-  
-  
+
+}
+
+var isModKey = function(event) {
+   return MOD_KEY.ctrlKey === event.ctrlKey
+       && MOD_KEY.altKey === event.altKey
+       && MOD_KEY.shiftKey === event.shiftKey
+       && MOD_KEY.key === event.which
+}
+
+document.addEventListener("keyup", function(event) {
+  const contentEditable = event.target.getAttribute('contenteditable');
+  const formElements = ['input', 'textarea', 'select'];
+  const isFormElement = formElements.indexOf(event.target.tagName.toLowerCase()) != -1;
+  if (contentEditable || isFormElement) {
+    return;
+  }
+
+  if (_isMod && !isModKey(event)) {
+      focusElement(event)
+      return
+  }
+
+  if (isModKey(event)) {
+    switchMod();
+    return;
+  }
 }, false);
 
 addStyles();

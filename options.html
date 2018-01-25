@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8"/>
-    <link href="chrome://browser/content/extension.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="common.js"></script>
     <style>
       ul {
       list-style-type: none;
@@ -17,12 +17,12 @@
     <h1 class="panel-section-header">Options</h1>
     <ul class="panel-section-list">
       <li>
-	<label>Mod key</label><br/>
-	<input type="text" id="mod_key"/>
+	       <label>Mod key</label><br/>
+	       <input type="button" id="mod_key" value="enter shortcut"/>
       </li>
       <li>
-	<label>Selection delay (ms)</label><br/>
-	<input type="text" id="selection_delay"/>
+	       <label>Selection delay (ms)</label><br/>
+         <input type="text" id="selection_delay"/>
       </li>
     </ul>
     <script src="options.js"></script>
