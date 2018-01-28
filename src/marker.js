@@ -78,10 +78,6 @@ var markLinks = function () {
     }
     var pos = _position.get(el);
 
-    if (getStyleProp(el, "position") == 'fixed') {
-      console.log(el);
-    }
-
     // mark only visible links
     if (_position.isBeyondClient(pos, document)) {
       break;
