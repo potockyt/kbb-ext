@@ -21,7 +21,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["common.js", "marker.js"]
+      "js": ["defaults.js", "mod.js", "marker.js"]
     }
   ],
 
@@ -34,7 +34,8 @@
 
   "web_accessible_resources": [
     "resources/marker_bg.png",
-    "resources/marker_bg_x.png"
+    "resources/marker_bg_x.png",
+    "resources/kbb.css"
   ]
 
 }

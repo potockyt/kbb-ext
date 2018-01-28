@@ -1,0 +1,12 @@
+.kbbMark { 
+    position: absolute; 
+    color: #fff; 
+    background: url("marker_bg.png");
+    font-size: 11px; 
+    text-align: center; 
+    z-index:9999; 
+}
+ 
+.kbbMarkX {
+    background: url("marker_bg_x.png");
+}

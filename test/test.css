@@ -1,0 +1,8 @@
+.fixedMenu {
+    position:fixed;
+    top:2em;
+    width: 100%;
+    background-color: #999; 
+    padding: 1em;
+}
+.fixedMenu a { padding: 1em; }
