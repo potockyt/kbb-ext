@@ -1,30 +1,65 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <script type="text/javascript" src="defaults.js"></script>
-    <style>
-      ul {
+
+<head>
+  <meta charset="utf-8" />
+  <script src="defaults.js"></script>
+  <style>
+    ul {
       list-style-type: none;
       margin: 0 0 0 .5em;
       padding: 0;
-      }
-      li { margin-bottom: 1em; }
-      h1 { margin-left: -10px; }
-    </style>
-  </head>
-  <body>
-    <h1 class="panel-section-header">Options</h1>
-    <ul class="panel-section-list">
-      <li>
-	       <label>Mod key</label><br/>
-	       <input type="button" id="mod_key" value="enter shortcut"/>
-      </li>
-      <li>
-	       <label>Selection delay (ms)</label><br/>
-         <input type="text" id="selection_delay"/>
-      </li>
-    </ul>
-    <script src="options.js"></script>
-  </body>
+    }
+
+    li {
+      margin-bottom: 1em;
+    }
+
+    h1 {
+      margin-left: -10px;
+    }
+
+    .markPreview {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-left: 1em;
+      color: #fff;
+      font-weight: bold;
+      opacity: 0.5;
+      text-align: center;
+      line-height:20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="panel-section-header">Options</h1>
+  <ul class="panel-section-list">
+    <li>
+      <label>Mod key</label>
+      <br/>
+      <input type="button" id="mod_key" value="enter shortcut" />
+    </li>
+    <li>
+      <label>Selection delay (ms)</label>
+      <br/>
+      <input type="text" id="selection_delay" />
+    </li>
+    <li>
+      <label>Mark color</label>
+      <br/>
+      <input type="text" id="mark_color0" />
+      <div id="mark_color0_preview" class="markPreview">42</div>
+    </li>
+    <li>
+      <label>Selected mark color</label>
+      <br/>
+      <input type="text" id="mark_color1" />
+      <div id="mark_color1_preview" class="markPreview">&nbsp;</div>
+    </li>
+  </ul>
+  <script src="options.js"></script>
+</body>
+
 </html>
