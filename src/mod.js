@@ -95,25 +95,20 @@ Position.prototype.get = function (el) {
   var yPos = this.standardMode ? 0 : this.scrollY;
 
   var isFixed = false;
-  
+
   while (el) {
     if (!isFixed) {
       isFixed = 'fixed' === window.getComputedStyle(el, null).getPropertyValue('position');
-      if (isFixed && 'auto' !== window.getComputedStyle(el, null).getPropertyValue('top')) {
-        yPos += this.scrollY;
-      }
-      if (isFixed && 'auto' !== window.getComputedStyle(el, null).getPropertyValue('left')) {
-        xPos += this.scrollX;
-      }
     }
 
     xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
     yPos += (el.offsetTop - el.scrollTop + el.clientTop);
     el = el.offsetParent;
   }
-  
+
   return {
     x: xPos,
-    y: yPos
+    y: yPos,
+    fixed: isFixed
   };
 }

@@ -1,11 +1,10 @@
-
 var Options = function (doc) {
   this.doc = doc;
   this.modKeyElem = doc.querySelector("#mod_key");
   this.selectionDelayElem = doc.querySelector("#selection_delay");
   this.markColor0Elem = doc.querySelector("#mark_color0");
   this.markColor1Elem = doc.querySelector("#mark_color1");
-  
+
   this.modKey = Defaults.modKey;
   this.selectionDelay = Defaults.selectionDelay;
   this.markColor0 = Defaults.markStyle.bgColor0;
@@ -27,7 +26,7 @@ Options.prototype.saveShortcut = function (ctrlKey, altKey, shiftKey, key) {
 
 Options.prototype.save = function (e) {
   e.preventDefault();
-  
+
   // Validation
   var selectionDelay = this.selectionDelayElem.value;
   if (!selectionDelay || isNaN(parseFloat(selectionDelay)) || !isFinite(selectionDelay) || selectionDelay <= 0) {
@@ -60,10 +59,10 @@ Options.prototype.save = function (e) {
 
 Options.prototype.restore = function () {
   var self = this;
-  
+
   function setCurrent(result) {
     self.modKey =  result.mod_key || Defaults.modKey;
-    
+
     var shortcut = [];
     if (self.modKey.ctrlKey) shortcut.push("CTRL");
     if (self.modKey.altKey) shortcut.push("ALT");
@@ -112,8 +111,8 @@ Options.prototype.modKeyElemOnClick = function () {
 }
 
 Options.prototype.preview = function() {
-  this.doc.querySelector("#mark_color0_preview").style.backgroundColor = "#" + this.markColor0;
-  this.doc.querySelector("#mark_color1_preview").style.backgroundColor = "#" + this.markColor1;
+  this.doc.querySelector("#mark_color0_preview").style.fill = "#" + this.markColor0;
+  this.doc.querySelector("#mark_color1_preview").style.fill = "#" + this.markColor1;
 }
 
 var _options = new Options(document);
