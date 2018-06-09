@@ -1,37 +1,84 @@
+var Options = function (doc) {
+  this.doc = doc;
+  this.modKeyElem = doc.querySelector("#mod_key");
+  this.selectionDelayElem = doc.querySelector("#selection_delay");
+  this.markColor0Elem = doc.querySelector("#mark_color0");
+  this.markColor1Elem = doc.querySelector("#mark_color1");
 
-function saveShortcut(ctrlKey, altKey, shiftKey, key) {
+  this.modKey = Defaults.modKey;
+  this.selectionDelay = Defaults.selectionDelay;
+  this.markColor0 = Defaults.markStyle.bgColor0;
+  this.markColor1 = Defaults.markStyle.bgColor1;
+
+  var self = this;
+  this.modKeyElem.onclick = function(e) { self.modKeyElemOnClick(e) };
+  this.selectionDelayElem.onblur = function(e) { self.save(e) };
+  this.markColor0Elem.onblur = function(e) { self.save(e); self.preview(); };
+  this.markColor1Elem.onblur = function(e) { self.save(e); self.preview(); };
+}
+
+Options.prototype.saveShortcut = function (ctrlKey, altKey, shiftKey, key) {
   var shortcut = { ctrlKey: ctrlKey, altKey: altKey, shiftKey: shiftKey, key: key };
   browser.storage.local.set({
     mod_key: shortcut
   });
 }
 
-function saveOptions(e) {
+Options.prototype.save = function (e) {
   e.preventDefault();
 
   // Validation
-  var selectionDelay = document.querySelector("#selection_delay").value;
-  if (!selectionDelay || selectionDelay <= 0) {
-    selectionDelay = Defaults.selectionDelay;
+  var selectionDelay = this.selectionDelayElem.value;
+  if (!selectionDelay || isNaN(parseFloat(selectionDelay)) || !isFinite(selectionDelay) || selectionDelay <= 0) {
+    selectionDelay = this.selectionDelay;
+    this.selectionDelayElem.value = this.selectionDelay;
+  }
+  var markColor0 = this.markColor0Elem.value;
+  if (!markColor0 || !markColor0.match("^[0-9a-f]{6}$")) {
+     markColor0 = this.markColor0;
+     this.markColor0Elem.value = this.markColor0;
+  }
+
+  var markColor1 = this.markColor1Elem.value;
+  if (!markColor1 || !markColor1.match("^[0-9a-f]{6}$")) {
+    markColor1 = this.markColor1;
+    this.markColor1Elem.value = this.markColor1;
   }
 
   // Store options
   browser.storage.local.set({
-    selection_delay: selectionDelay
+    selection_delay: selectionDelay,
+    mark_color0 : markColor0,
+    mark_color1 : markColor1
   });
+
+  this.selectionDelay = selectionDelay;
+  this.markColor0 = markColor0;
+  this.markColor1 = markColor1;
 }
 
-function restoreOptions() {
+Options.prototype.restore = function () {
+  var self = this;
 
   function setCurrent(result) {
-    var res = result.mod_key || Defaults.modKey;
+    self.modKey =  result.mod_key || Defaults.modKey;
+
     var shortcut = [];
-    if (res.ctrlKey) shortcut.push("CTRL");
-    if (res.altKey) shortcut.push("ALT");
-    if (res.shiftKey) shortcut.push("SHIFT");
-    shortcut.push(keyCodeMapping[res.key]);
-    document.querySelector("#mod_key").value = shortcut.join("+");
-    document.querySelector("#selection_delay").value = result.selection_delay || Defaults.selectionDelay;
+    if (self.modKey.ctrlKey) shortcut.push("CTRL");
+    if (self.modKey.altKey) shortcut.push("ALT");
+    if (self.modKey.shiftKey) shortcut.push("SHIFT");
+    shortcut.push(KEY_CODE_MAPPING[self.modKey.key]);
+    self.modKeyElem.value = shortcut.join("+");
+
+    self.selectionDelay = result.selection_delay || Defaults.selectionDelay;
+    self.markColor0 = result.mark_color0 || Defaults.markStyle.bgColor0;
+    self.markColor1 = result.mark_color1 || Defaults.markStyle.bgColor1;
+
+    self.selectionDelayElem.value = self.selectionDelay;
+    self.markColor0Elem.value = self.markColor0;
+    self.markColor1Elem.value = self.markColor1;
+
+    self.preview();
   }
 
   function onError(error) {
@@ -41,12 +88,11 @@ function restoreOptions() {
   browser.storage.local.get().then(setCurrent, onError);
 }
 
-const MOD_KEY_ELEM = document.querySelector("#mod_key");
+Options.prototype.modKeyElemOnClick = function () {
+  this.modKeyElem.value = "press key combination";
 
-MOD_KEY_ELEM.onclick = function () {
-  MOD_KEY_ELEM.value = "press key combination";
-
-  document.addEventListener("keyup", function keyUpListener(event) {
+  self = this;
+  this.doc.addEventListener("keyup", function keyUpListener(event) {
     event.preventDefault();
     // if last keyup was shift, ctrl or alt then skip
     if (event.which == 16 || event.which == 17 || event.which == 18) {
@@ -57,18 +103,22 @@ MOD_KEY_ELEM.onclick = function () {
     if (event.ctrlKey) shortcut.push("CTRL");
     if (event.altKey) shortcut.push("ALT");
     if (event.shiftKey) shortcut.push("SHIFT");
-    shortcut.push(keyCodeMapping[event.which]);
-    MOD_KEY_ELEM.value = shortcut.join("+");
-    document.removeEventListener("keyup", keyUpListener, true);
-    saveShortcut(event.ctrlKey, event.altKey, event.shiftKey, event.which);
+    shortcut.push(KEY_CODE_MAPPING[event.which]);
+    self.modKeyElem.value = shortcut.join("+");
+    self.doc.removeEventListener("keyup", keyUpListener, true);
+    self.saveShortcut(event.ctrlKey, event.altKey, event.shiftKey, event.which);
   }, true);
 }
 
-document.addEventListener("DOMContentLoaded", restoreOptions);
-document.querySelector("#selection_delay").onblur = saveOptions;
+Options.prototype.preview = function() {
+  this.doc.querySelector("#mark_color0_preview").style.fill = "#" + this.markColor0;
+  this.doc.querySelector("#mark_color1_preview").style.fill = "#" + this.markColor1;
+}
 
+var _options = new Options(document);
+document.addEventListener("DOMContentLoaded", _options.restore());
 
-var keyCodeMapping = {
+const KEY_CODE_MAPPING = {
   8: "Backspace",
   9: "Tab",
   13: "Enter",

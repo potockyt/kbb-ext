@@ -1,30 +1,72 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <script type="text/javascript" src="defaults.js"></script>
-    <style>
-      ul {
+
+<head>
+  <meta charset="utf-8" />
+  <script src="defaults.js"></script>
+  <link rel="stylesheet" type="text/css" href="resources/kbb.css" />
+  <style>
+    ul {
       list-style-type: none;
       margin: 0 0 0 .5em;
       padding: 0;
-      }
-      li { margin-bottom: 1em; }
-      h1 { margin-left: -10px; }
-    </style>
-  </head>
-  <body>
-    <h1 class="panel-section-header">Options</h1>
-    <ul class="panel-section-list">
-      <li>
-	       <label>Mod key</label><br/>
-	       <input type="button" id="mod_key" value="enter shortcut"/>
-      </li>
-      <li>
-	       <label>Selection delay (ms)</label><br/>
-         <input type="text" id="selection_delay"/>
-      </li>
-    </ul>
-    <script src="options.js"></script>
-  </body>
+    }
+
+    li {
+      clear: both;
+    }
+
+    h1 {
+      margin-left: -10px;
+    }
+
+    input {
+      float: left;
+      margin-bottom: 1em;
+    }
+
+    .kbbMark, .kbbMarkX {
+      position: relative;
+      float: left;
+      margin-left: 1em;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="panel-section-header">Settings</h1>
+  <ul class="panel-section-list">
+    <li>
+      <label>Mod key</label>
+      <br/>
+      <input type="button" id="mod_key" value="enter shortcut" />
+    </li>
+    <li>
+      <label>Selection delay (ms)</label>
+      <br/>
+      <input type="text" id="selection_delay" />
+    </li>
+    <li>
+      <label>Mark color</label>
+      <br/>
+      <input type="text" id="mark_color0" />
+      <svg width="20" height="20" class="kbbMark">
+        <circle cx="10" cy="10" r="10" id="mark_color0_preview"></circle>
+        <text x="50%" y="50%" dy=".3em">42</text>
+      </svg>
+    </li>
+    <li>
+      <label>Selected mark color</label>
+      <br/>
+      <input type="text" id="mark_color1" />
+      <svg width="20" height="20" class="kbbMarkX">
+        <circle cx="10" cy="10" r="10" id="mark_color1_preview"></circle>
+        <text x="50%" y="50%" dy=".3em">&nbsp;</text>
+      </svg>
+    </li>
+  </ul>
+  <script src="options.js"></script>
+</body>
+
 </html>

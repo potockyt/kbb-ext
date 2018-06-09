@@ -1,5 +1,6 @@
-var Mod = function (modKey) {
+var Mod = function (modKey, selectionDelay) {
   this.modKey = modKey || Defaults.modKey;
+  this.selectionDelay = selectionDelay || Defaults.selectionDelay;
   this.isMod = false;
 }
 
@@ -21,6 +22,10 @@ Mod.prototype.isEnabled = function () {
   return this.isMod;
 }
 
+Mod.prototype.getSelectionDelay = function() {
+  return this.selectionDelay;
+}
+
 
 
 var ModState = function () {
@@ -31,15 +36,15 @@ var ModState = function () {
 }
 
 ModState.prototype.incMarkCount = function () {
-  this.markCount++;
+  return ++this.markCount;
 }
 
 ModState.prototype.getMarkCount = function () {
   return this.markCount;
 }
 
-ModState.prototype.getMarkId = function (event) {
-  if (event.timeStamp - this.prevEventTimeStamp > _selectionDelay || this.markCount < 10) {
+ModState.prototype.getMarkId = function (event, selectionDelay) {
+  if (event.timeStamp - this.prevEventTimeStamp > selectionDelay || this.markCount < 10) {
     this.prevEventTimeStamp = event.timeStamp;
     this.markId = event.key;
   } else {
@@ -90,25 +95,20 @@ Position.prototype.get = function (el) {
   var yPos = this.standardMode ? 0 : this.scrollY;
 
   var isFixed = false;
-  
+
   while (el) {
     if (!isFixed) {
       isFixed = 'fixed' === window.getComputedStyle(el, null).getPropertyValue('position');
-      if (isFixed && 'auto' !== window.getComputedStyle(el, null).getPropertyValue('top')) {
-        yPos += this.scrollY;
-      }
-      if (isFixed && 'auto' !== window.getComputedStyle(el, null).getPropertyValue('left')) {
-        xPos += this.scrollX;
-      }
     }
 
     xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
     yPos += (el.offsetTop - el.scrollTop + el.clientTop);
     el = el.offsetParent;
   }
-  
+
   return {
     x: xPos,
-    y: yPos
+    y: yPos,
+    fixed: isFixed
   };
 }
